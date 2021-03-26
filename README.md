@@ -31,3 +31,10 @@ jobs:
       uses: jimpaine/tf-plan-as-comment@v1
 
 ```
+
+## output
+
+> names, urls and ids have been changed from originals and this is only to give and idea
+> of that the comment will look like
+
+![github comment](./comment.png)
