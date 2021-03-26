@@ -34,7 +34,7 @@ jobs:
 
 ## output
 
-> names, urls and ids have been changed from originals and this is only to give and idea
-> of that the comment will look like
+> names, urls and ids have been changed from originals and this is only to give an idea
+> of what the comment will look like
 
 ![github comment](./comment.png)
