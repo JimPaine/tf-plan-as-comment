@@ -11,7 +11,7 @@ runs:
     - run: |
           startline=$(grep -E --line-number '^$' "${{github.WORKSPACE}}/plan.txt" | sed 's/://g' | head -n 1) && \
           endline=$(grep -E --line-number '^$' "${{github.WORKSPACE}}/plan.txt" | sed 's/://g' | tail -n 1) && \
-          difference=$(sed -n "${startline},${endline}p" "${{github.WORKSPACE}}/plan.txt" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g) && \
+          difference=$(sed -n "${startline},${endline}p" "${{github.WORKSPACE}}/plan.txt" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g") && \
           pull_number=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH") && \
           gh pr comment "$pull_number" \
           --body "$difference" \
