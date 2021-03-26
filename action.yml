@@ -1,0 +1,20 @@
+name: 'TF Plan as PR Comment'
+description: 'Perform a TF plan and output the changes as a PR comment'
+runs:
+  using: "composite"
+  steps:
+    - run: terraform plan > "${{github.WORKSPACE}}/plan.txt"
+      shell: bash
+
+    - run: gh auth login --with-token <<< "${{github.TOKEN}}"
+      shell: bash
+    - run: |
+          startline=$(grep -E --line-number '^$' "${{github.WORKSPACE}}/plan.txt" | sed 's/://g' | head -n 1) && \
+          difference=$(tail -n +$startline "${{github.WORKSPACE}}/plan.txt" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g") && \
+          endline=$(echo -e "$difference" | grep -E --line-number '^$' | sed 's/://g' | tail -n 1) && \
+          difference=$(echo -e "$difference" | head -n $endline) && \
+          pull_number=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH") && \
+          gh pr comment "$pull_number" \
+          --body "$difference" \
+          --repo "${{github.SERVER_URL}}/${{github.REPOSITORY}}"
+      shell: bash
