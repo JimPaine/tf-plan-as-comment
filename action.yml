@@ -10,9 +10,8 @@ runs:
       shell: bash
     - run: |
           startline=$(grep -E --line-number '^$' "${{github.WORKSPACE}}/plan.txt" | sed 's/://g' | head -n 1) && \
-          difference=$(tail -n +$startline "${{github.WORKSPACE}}/plan.txt" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g") && \
-          endline=$(echo -e "$difference" | grep -E --line-number '^$' | sed 's/://g' | tail -n 1) && \
-          difference=$(echo -e "$difference" | head -n $endline) && \
+          endline=$(grep -E --line-number '^$' "${{github.WORKSPACE}}/plan.txt" | sed 's/://g' | tail -n 1) && \
+          difference==$(sed -n "${startline},${endline}p" "${{github.WORKSPACE}}/plan.txt") && \
           pull_number=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH") && \
           gh pr comment "$pull_number" \
           --body "$difference" \
